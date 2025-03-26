@@ -1,118 +1,155 @@
 "use client";
 
+import React from "react";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 import {
-  Box,
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-  Link as MuiLink,
-} from "@mui/material";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import { useState } from "react";
+  Instagram,
+  Facebook,
+  WhatsApp,
+  Phone,
+  LocationOn,
+  AccessTime,
+  Favorite,
+} from "@mui/icons-material";
 
-export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        setSubscribed(true);
-        setEmail("");
-      }
-    } catch (error) {
-      console.error("Error al suscribirse:", error);
-    }
-  };
-
+const Footer = () => {
   return (
-    <Box component="footer" sx={{ bgcolor: "#222", color: "white", py: 6 }}>
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: "primary.main",
+        color: "white",
+        py: 6,
+        mt: "auto",
+      }}
+    >
       <Container maxWidth="lg">
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            marginTop: "-32px",
+            marginLeft: "-32px",
+          }}
+        >
+          {/* Información de contacto */}
+          <Box
+            sx={{
+              width: { xs: "100%", sm: "33.333%" },
+              padding: "32px 0 0 32px",
+            }}
+          >
             <Typography variant="h6" gutterBottom>
-              JOCKERBAR SAN BERNARDO
+              Contacto
             </Typography>
-            <Typography variant="body2">
-              Tu lugar favorito para compartir momentos inolvidables en San
-              Bernardo.
-            </Typography>
-          </Grid>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+              <LocationOn sx={{ mr: 1 }} />
+              <Typography variant="body2">
+                O&apos;Higgins 279, 8071077 San Bernardo, Región Metropolitana,
+                Chile
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+              <Phone sx={{ mr: 1 }} />
+              <Typography variant="body2">
+                <Link href="tel:+56998371618" color="inherit" underline="hover">
+                  +56 9 9837 1618
+                </Link>
+              </Typography>
+            </Box>
+          </Box>
 
-          <Grid item xs={12} md={4}>
+          {/* Horarios */}
+          <Box
+            sx={{
+              width: { xs: "100%", sm: "33.333%" },
+              padding: "32px 0 0 32px",
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Horarios
+            </Typography>
+            <Box sx={{ display: "flex", alignItems: "flex-start", mb: 1 }}>
+              <AccessTime sx={{ mr: 1, mt: 0.5 }} />
+              <Box>
+                <Typography variant="body2">
+                  Lunes - Jueves: 10:00–23:00
+                </Typography>
+                <Typography variant="body2">Viernes: 10:00–03:00</Typography>
+                <Typography variant="body2">Sábado: 13:00–03:00</Typography>
+                <Typography variant="body2">Domingo: Cerrado</Typography>
+              </Box>
+            </Box>
+          </Box>
+
+          {/* Redes sociales */}
+          <Box
+            sx={{
+              width: { xs: "100%", sm: "33.333%" },
+              padding: "32px 0 0 32px",
+            }}
+          >
             <Typography variant="h6" gutterBottom>
               Síguenos
             </Typography>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <MuiLink
+            <Box>
+              <Link
                 href="https://www.instagram.com/jokerbar.sanbernardo/"
-                target="_blank"
                 color="inherit"
+                sx={{ mr: 2 }}
               >
-                <InstagramIcon />
-              </MuiLink>
-              <MuiLink href="#" target="_blank" color="inherit">
-                <FacebookIcon />
-              </MuiLink>
+                <Instagram fontSize="large" />
+              </Link>
+              <Link href="#" color="inherit" sx={{ mr: 2 }}>
+                <Facebook fontSize="large" />
+              </Link>
+              <Link href="https://wa.me/56998371618" color="inherit">
+                <WhatsApp fontSize="large" />
+              </Link>
             </Box>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" gutterBottom>
-              Suscríbete a nuestra newsletter
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              Bar, sandwichería y pizzería en San Bernardo
             </Typography>
-            {!subscribed ? (
-              <Box component="form" onSubmit={handleSubscribe}>
-                <TextField
-                  label="Tu correo electrónico"
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  margin="normal"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  sx={{
-                    backgroundColor: "rgba(255,255,255,0.9)",
-                    borderRadius: 1,
-                  }}
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  sx={{ mt: 1 }}
-                >
-                  Suscribirse
-                </Button>
-              </Box>
-            ) : (
-              <Typography variant="body2">
-                ¡Gracias por suscribirte! Pronto recibirás nuestras novedades.
-              </Typography>
-            )}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Typography variant="body2" align="center" sx={{ mt: 4 }}>
-          © {new Date().getFullYear()} Jockerbar San Bernardo. Todos los
+          © {new Date().getFullYear()} Jocker Bar San Bernardo. Todos los
           derechos reservados.
         </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 2,
+            flexWrap: "wrap",
+          }}
+        >
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            Hecho con{" "}
+            <Favorite color="error" fontSize="small" sx={{ mx: 0.5 }} /> por
+          </Typography>
+          <Link
+            href="tel:+33635402450"
+            color="inherit"
+            underline="hover"
+            sx={{ display: "flex", alignItems: "center", ml: 1 }}
+          >
+            Quentin LAMAGNERE +33635402450
+          </Link>
+        </Box>
       </Container>
     </Box>
   );
-}
+};
+
+export default Footer;

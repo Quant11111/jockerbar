@@ -1,20 +1,21 @@
+"use client";
+
 import { createTheme } from "@mui/material/styles";
 
-// Thème personnalisé pour le site Jockerbar
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#e91e63", // Rose pour les éléments principaux
+      main: "#1b5e20", // Verde oscuro
     },
     secondary: {
-      main: "#673ab7", // Violet pour les éléments secondaires
+      main: "#d32f2f", // Rojo
     },
     background: {
-      default: "#f8f9fa", // Gris clair pour le fond
+      default: "#f5f5f5",
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: "Roboto, Arial, sans-serif",
     h1: {
       fontWeight: 700,
     },
@@ -24,14 +25,8 @@ const theme = createTheme({
     h3: {
       fontWeight: 600,
     },
-    h4: {
-      fontWeight: 600,
-    },
-    h5: {
-      fontWeight: 600,
-    },
-    h6: {
-      fontWeight: 600,
+    button: {
+      textTransform: "none",
     },
   },
   components: {
@@ -39,24 +34,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          textTransform: "none",
-          fontWeight: 500,
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-        },
-      },
-    },
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          paddingLeft: 24,
-          paddingRight: 24,
         },
       },
     },

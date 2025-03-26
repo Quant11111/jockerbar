@@ -1,104 +1,143 @@
-import Header from "../components/Header";
+import React from "react";
+import { Container, Typography, Box } from "@mui/material";
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Box, Container, Typography, Divider, Tabs, Tab } from "@mui/material";
-import EventsList from "../components/EventsList";
+import EventCard, { EventProps } from "../components/EventCard";
 
-export default function EventosPage() {
+// Événements à afficher
+const events: EventProps[] = [
+  {
+    title: "Noche de Rock Chileno",
+    date: "15 de Abril, 2023",
+    time: "21:00",
+    description:
+      "Una noche dedicada a las mejores bandas de rock chileno con música en vivo.",
+    image: "/images/event1.jpg",
+    type: "concert",
+  },
+  {
+    title: "Karaoke Night",
+    date: "20 de Abril, 2023",
+    time: "20:00",
+    description:
+      "Ven a cantar tus canciones favoritas y disfruta de una noche de diversión.",
+    image: "/images/event2.jpg",
+    type: "karaoke",
+  },
+  {
+    title: "Fiesta de los 80s",
+    date: "28 de Abril, 2023",
+    time: "22:00",
+    description:
+      "Revive la época dorada con música, decoración y tragos temáticos de los años 80.",
+    image: "/images/event3.jpg",
+    type: "theme",
+  },
+  {
+    title: "Jam Session",
+    date: "5 de Mayo, 2023",
+    time: "21:30",
+    description:
+      "Una noche para músicos y amantes de la música. Trae tu instrumento y únete a la jam.",
+    image: "/images/event4.jpg",
+    type: "concert",
+  },
+  {
+    title: "Noche Latina",
+    date: "12 de Mayo, 2023",
+    time: "22:00",
+    description:
+      "Salsa, bachata, reggaeton y más. Una noche llena de ritmos latinos y baile.",
+    image: "/images/event5.jpg",
+    type: "theme",
+  },
+  {
+    title: "Tributo a Queen",
+    date: "19 de Mayo, 2023",
+    time: "21:00",
+    description:
+      "Disfruta de las mejores canciones de Queen interpretadas por una banda tributo local.",
+    image: "/images/event6.jpg",
+    type: "concert",
+  },
+];
+
+export default function Eventos() {
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <Header />
+    <main>
+      <Navbar />
 
-      <Box component="main" sx={{ flexGrow: 1 }}>
-        {/* Hero section plus simple pour la page des événements */}
+      {/* Header */}
+      <Box
+        sx={{
+          bgcolor: "primary.main",
+          color: "white",
+          py: 8,
+          mb: 6,
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="h2"
+            component="h1"
+            gutterBottom
+            sx={{ fontWeight: 700 }}
+          >
+            Eventos
+          </Typography>
+          <Typography variant="h5">
+            Descubre todas las actividades y eventos especiales que tenemos
+            preparados para ti.
+          </Typography>
+        </Container>
+      </Box>
+
+      {/* Eventos */}
+      <Container maxWidth="lg" sx={{ mb: 8 }}>
         <Box
           sx={{
-            backgroundColor: "#333",
-            color: "white",
-            py: 6,
-            textAlign: "center",
+            display: "flex",
+            flexWrap: "wrap",
+            marginTop: "-32px",
+            marginLeft: "-32px",
           }}
         >
-          <Container maxWidth="lg">
-            <Typography
-              variant="h3"
-              component="h1"
-              gutterBottom
-              sx={{ fontWeight: "bold" }}
+          {events.map((event, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: { xs: "100%", sm: "50%", md: "33.333%" },
+                padding: "32px 0 0 32px",
+                display: "flex",
+              }}
             >
-              Nuestros Eventos
-            </Typography>
-            <Typography variant="h6" sx={{ maxWidth: 700, mx: "auto" }}>
-              Descubre todo lo que tenemos preparado para ti: conciertos,
-              karaoke, fiestas temáticas y mucho más.
-            </Typography>
-          </Container>
+              <Box sx={{ width: "100%" }}>
+                <EventCard {...event} />
+              </Box>
+            </Box>
+          ))}
         </Box>
+      </Container>
 
-        <Container maxWidth="lg" sx={{ py: 6 }}>
-          {/* Filtres d'événements */}
-          <Box sx={{ mb: 4 }}>
-            <Tabs
-              value={0}
-              centered
-              sx={{
-                "& .MuiTab-root": {
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  px: 4,
-                },
-              }}
-            >
-              <Tab label="Todos" />
-              <Tab label="Conciertos" />
-              <Tab label="Karaoke" />
-              <Tab label="Fiestas Temáticas" />
-            </Tabs>
-          </Box>
-
-          <Divider sx={{ mb: 6 }} />
-
-          {/* Liste complète des événements */}
-          <EventsList limit={9} />
-
-          {/* Section promotionnelle */}
-          <Box
-            sx={{
-              mt: 10,
-              p: 6,
-              backgroundColor: "#f5f5f5",
-              borderRadius: 4,
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
-              ¿Quieres tocar en Jockerbar?
-            </Typography>
-            <Typography
-              variant="body1"
-              paragraph
-              sx={{ maxWidth: 700, mx: "auto" }}
-            >
-              Estamos siempre buscando talentos emergentes para presentarse en
-              nuestro escenario. Si eres músico o tienes una banda, contáctanos
-              para coordinar tu presentación.
-            </Typography>
-            <Typography
-              component="a"
-              href="/contacto"
-              sx={{
-                color: "#e91e63",
-                fontWeight: "bold",
-                textDecoration: "none",
-                "&:hover": { textDecoration: "underline" },
-              }}
-            >
-              Contactar para reservar fecha →
-            </Typography>
-          </Box>
+      {/* Información Adicional */}
+      <Box sx={{ bgcolor: "background.default", py: 6 }}>
+        <Container maxWidth="md">
+          <Typography variant="h4" gutterBottom textAlign="center">
+            ¿Quieres organizar un evento en Jocker Bar?
+          </Typography>
+          <Typography variant="body1" paragraph textAlign="center">
+            Si estás interesado en organizar un evento privado, una celebración
+            especial o presentar tu música en nuestro local, no dudes en
+            contactarnos.
+          </Typography>
+          <Typography variant="body1" textAlign="center">
+            Llámanos al +56 9 9837 1618 o escríbenos a info@jockerbar.cl para
+            más información.
+          </Typography>
         </Container>
       </Box>
 
       <Footer />
-    </Box>
+    </main>
   );
 }

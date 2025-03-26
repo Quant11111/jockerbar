@@ -1,22 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
-import ThemeRegistry from "./ThemeRegistry";
+import ThemeRegistry from "./components/ThemeRegistry";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Jockerbar San Bernardo | Bar y Eventos",
+  title: "Jocker Bar San Bernardo - Chill, Música, Comida",
   description:
-    "Tu lugar preferido para compartir momentos inolvidables en San Bernardo, Chile. Conciertos, karaoke, eventos y mucho más.",
+    "Bar, sandwichería y pizzería en San Bernardo. Eventos en vivo, karaoke y mucho más.",
 };
 
 export default function RootLayout({
@@ -26,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={roboto.className}>
         <ThemeRegistry>{children}</ThemeRegistry>
       </body>
     </html>

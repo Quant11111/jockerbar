@@ -1,47 +1,38 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-// Chemin vers le fichier JSON de stockage des emails
-const dataPath = path.join(process.cwd(), "data");
-const subscribersPath = path.join(dataPath, "subscribers.json");
+const dataFilePath = path.join(
+  process.cwd(),
+  "src/app/api/newsletter/subscribers.json"
+);
 
-// Assurer que le dossier data existe
-if (!fs.existsSync(dataPath)) {
-  fs.mkdirSync(dataPath, { recursive: true });
+// Assurez-vous que le fichier existe
+function ensureFileExists() {
+  if (!fs.existsSync(dataFilePath)) {
+    fs.writeFileSync(dataFilePath, JSON.stringify({ subscribers: [] }), "utf8");
+  }
 }
 
-// Assurer que le fichier subscribers.json existe
-if (!fs.existsSync(subscribersPath)) {
-  fs.writeFileSync(
-    subscribersPath,
-    JSON.stringify({ subscribers: [] }),
-    "utf-8"
-  );
-}
-
-// Fonction pour lire les données des abonnés
+// Obtenir les données des abonnés actuels
 function getSubscribers() {
-  const data = fs.readFileSync(subscribersPath, "utf-8");
+  ensureFileExists();
+  const data = fs.readFileSync(dataFilePath, "utf8");
   return JSON.parse(data);
 }
 
-// Fonction pour écrire les données des abonnés
-function writeSubscribers(data: { subscribers: string[] }) {
-  fs.writeFileSync(subscribersPath, JSON.stringify(data, null, 2), "utf-8");
+// Sauvegarder les données des abonnés
+function saveSubscribers(data: { subscribers: string[] }) {
+  fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), "utf8");
 }
 
-// POST - Ajouter un nouvel abonné
-export async function POST(request: Request) {
+// Ajouter un abonné
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { email } = body;
+    const { email } = await request.json();
 
     if (!email || !email.includes("@")) {
-      return NextResponse.json(
-        { success: false, message: "Correo electrónico inválido" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email inválido" }, { status: 400 });
     }
 
     const data = getSubscribers();
@@ -49,55 +40,53 @@ export async function POST(request: Request) {
     // Vérifier si l'email existe déjà
     if (data.subscribers.includes(email)) {
       return NextResponse.json(
-        { success: false, message: "Ya estás suscrito a nuestra newsletter" },
-        { status: 400 }
+        { error: "Email ya está registrado" },
+        { status: 409 }
       );
     }
 
-    // Ajouter le nouvel email
+    // Ajouter l'email
     data.subscribers.push(email);
-    writeSubscribers(data);
+    saveSubscribers(data);
 
-    return NextResponse.json(
-      { success: true, message: "¡Gracias por suscribirte!" },
-      { status: 201 }
-    );
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error adding subscriber:", error);
     return NextResponse.json(
-      { success: false, message: "Error al procesar la solicitud" },
+      { error: "Error interno del servidor" },
       { status: 500 }
     );
   }
 }
 
-// DELETE - Désabonner un utilisateur
-export async function DELETE(request: Request) {
+// Désabonner
+export async function DELETE(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get("email");
+    const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json(
-        { success: false, message: "Correo electrónico no proporcionado" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email requerido" }, { status: 400 });
     }
 
     const data = getSubscribers();
 
-    // Filtrer l'email à supprimer
-    data.subscribers = data.subscribers.filter((e: string) => e !== email);
-    writeSubscribers(data);
+    // Vérifier si l'email existe
+    if (!data.subscribers.includes(email)) {
+      return NextResponse.json(
+        { error: "Email no encontrado" },
+        { status: 404 }
+      );
+    }
 
-    return NextResponse.json(
-      { success: true, message: "Te has dado de baja correctamente" },
-      { status: 200 }
-    );
+    // Supprimer l'email
+    data.subscribers = data.subscribers.filter((e: string) => e !== email);
+    saveSubscribers(data);
+
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error removing subscriber:", error);
     return NextResponse.json(
-      { success: false, message: "Error al procesar la solicitud" },
+      { error: "Error interno del servidor" },
       { status: 500 }
     );
   }
